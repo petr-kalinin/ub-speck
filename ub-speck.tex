@@ -1,0 +1,234 @@
+\documentclass[style=kapslide,size=10pt]{powerdot}
+\usepackage{pifont}
+
+\pdsetup{lf={\hbox to 0pt{\hss\arabic{slide}\,/\,\pageref*{LastPage}\quad}},
+theslide={},
+rf={},
+%palette=slide,
+palette=color,
+}
+%,rf={\thepage\ifallPages\ / \pageref{LastPage}\fi\strut}
+
+\raggedright
+
+\title{Undefined behavior:\\
+как прострелить себе ногу в C++}
+
+\author{
+\hbox to 11cm{\hfill\rm \small Петр Калинин, 2016--2018}\\[-0.15cm]
+\hbox to 11cm{\hfill\rm \small Эту презентацию можно распространять по лицензии}\\[-0.15cm]
+\hbox to 11cm{\hfill\rm \small GNU General Public License версии 3.0 или старше}\\[-0.05cm]
+\hbox to 11cm{\hfill\rm \small \includegraphics[width=1.5cm]{gpl-by-christian-candena-color.eps}}
+}
+
+\date{}
+
+\def\lineitem{\textbullet\quad}
+\def\lineitemtwo{\quad\ding{226}\quad}
+
+\begin{document}
+\maketitle
+
+-----------------------------------------
+\begin{slide}[bm=]{Компиляторы C++}
+\pause
+\begin{itemize}
+\item Gnu Compiler Collection (GCC) 
+\pause
+\item Microsoft Visual Studio (MSVS)
+\pause
+\item Clang
+\pause
+\item Intel C Compiler (ICC)
+\item Много много других
+\end{itemize}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Стандарт C++}
+\begin{itemize}
+\item Публикуется International Standard Organisation
+\item Большинство компиляторов стараются его соблюдать (MSVS известное исключение)
+\item Существуют разные версии стандарта: C++03, C++11 (C++0x), C++14, C++17 (в разработке)
+\item Отдельные аспекты языка отданы <<на откуп>> авторам компиляторов (<<реализаций>>)
+\end{itemize}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Вариации стандарта}
+\begin{itemize}
+\item Implementation-defined behavior
+\begin{itemize}
+\item Реализация (компилятор) должен выбрать вариант, документировать и придерживаться его
+\item Пример: размер типа \texttt{int}
+\end{itemize} 
+\pause
+\item Unspecified behavior
+\begin{itemize}
+\item Компилятор может выбрать любой из вариантов, причем каждый раз новый
+\item Пример: порядок вычислений аргументов функции
+\end{itemize} 
+\end{itemize}
+\end{slide}
+%-----------------------------------------
+
+\begin{wideslide}[bm=]{Пример Unspecified behavior}
+\twocolumn[lcolwidth=0.5\linewidth,rcolwidth=0.45\linewidth]{
+\small
+\verbatiminput{examples/evaluation_order.cpp}
+}
+{
+\pause
+\small
+\verbatiminput{examples/evaluation_order.log}
+}
+\end{wideslide}
+%-----------------------------------------
+\begin{slide}[bm=]{Вариации стандарта}
+\begin{itemize}
+\item Implementation-defined behavior
+\begin{itemize}
+\item Реализация (компилятор) должен выбрать вариант, документировать и придерживаться его
+\item Пример: размер типа \texttt{int}
+\end{itemize} 
+\item Unspecified behavior
+\begin{itemize}
+\item Компилятор может выбрать любой из вариантов, причем каждый раз новый
+\item Пример: порядок вычислений аргументов функции
+\end{itemize} 
+\pause
+\item Undefined behavior
+\begin{itemize}
+\item Компилятор (и скомпилированная программа) может сделать абсолютно что угодно
+\item Диагностировать ошибку компиляции, <<вылететь>>, выдать некорректные даннные, отформатировать жесткий диск\dots
+\item А может и работать <<как ожидалось>>
+\end{itemize}
+\end{itemize}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Undefined behavior подробнее}
+\begin{itemize}
+\item Стандарт позволяет компилятору сделать что угодно вообще
+\item Никаких требований к поведению компилятора/программы нет
+\item Программа может скомпилироваться, не скомпилироваться с ошибкой, компилятор может упасть и т.д.
+\item Скомпилированная программа может работать как ожидалось, молча работать неправильно, падать, форматировать жесткий диск и т.д.
+\item{}<<Nasal daemos>>: << \dots can make daemons fly out of your nose>> 
+\item В частности, программа может <<предвидеть>>: ошибка может произойти еще до того, как программа дошла до ошибочного места
+\item На самом деле, UB используется в первую очередь для оптимизации и переносимости
+\item В C ситуация аналогичная
+\end{itemize}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Выход за пределы массива}
+\small
+\verbatiminput{examples/array_range_error.cpp}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Выход за пределы массива}
+\twocolumn[lcolwidth=0.5\linewidth,rcolwidth=0.45\linewidth]{
+\small
+\verbatiminput{examples/array_range_error.log.1}
+}
+{
+\pause
+\small
+\verbatiminput{examples/array_range_error.log.2}
+}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Неинициализированный bool}
+\twocolumn[lcolwidth=0.5\linewidth,rcolwidth=0.45\linewidth]{
+\small
+\verbatiminput{examples/uninitialized_bool.cpp}
+}
+{
+\pause
+\small
+\verbatiminput{examples/uninitialized_bool.log}
+}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Переполнение int'а}
+\twocolumn[lcolwidth=0.5\linewidth,rcolwidth=0.45\linewidth]{
+\small
+\verbatiminput{examples/signed_overflow.cpp}
+}
+{
+\pause
+\small
+\verbatiminput{examples/signed_overflow.log}
+}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Изменение const-переменной}
+\twocolumn[lcolwidth=0.5\linewidth,rcolwidth=0.45\linewidth]{
+\small
+\verbatiminput{examples/modify_const.cpp}
+}
+{
+\pause
+\small
+\verbatiminput{examples/modify_const.log}
+}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Изменение const-переменной}
+\twocolumn[lcolwidth=0.5\linewidth,rcolwidth=0.45\linewidth]{
+\small
+\verbatiminput{examples/modify_const_2.cpp}
+}
+{
+\pause
+\small
+\verbatiminput{examples/modify_const_2.log}
+}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Слишком большой сдвиг}
+\twocolumn[lcolwidth=0.5\linewidth,rcolwidth=0.45\linewidth]{
+\small
+\verbatiminput{examples/left_shift.cpp}
+}
+{
+\pause
+\small
+\verbatiminput{examples/left_shift.log}
+}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Двухкратная модификация}
+\small
+\verbatiminput{examples/modifying_twice.cpp}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Двухкратная модификация}
+\twocolumn[lcolwidth=0.5\linewidth,rcolwidth=0.45\linewidth]{
+\small
+\verbatiminput{examples/modifying_twice_2.cpp}
+}
+{
+\pause
+\small
+\verbatiminput{examples/modifying_twice_2.s}
+\pause
+\verbatiminput{examples/modifying_twice_2.s2}
+}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{realloc}
+\twocolumn[lcolwidth=0.5\linewidth,rcolwidth=0.45\linewidth]{
+\small
+\verbatiminput{examples/realloc.cpp}
+}
+{
+\pause
+\small
+\verbatiminput{examples/realloc.log}
+}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Выход за пределы массива}
+\label{LastPage}
+
+\end{slide}
+%-----------------------------------------
+
+\end{document}
