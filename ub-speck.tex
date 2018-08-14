@@ -1,7 +1,7 @@
 \documentclass[style=kapslide,size=10pt]{powerdot}
 \usepackage{pifont}
 
-\pdsetup{lf={\hbox to 0pt{\hss\arabic{slide}\,/\,\pageref*{LastPage}\quad}},
+\pdsetup{lf={\hbox to 0pt{\hss\arabic{slide}\quad}},
 theslide={},
 rf={},
 %palette=slide,
@@ -27,9 +27,21 @@ palette=color,
 \def\lineitemtwo{\quad\ding{226}\quad}
 
 \begin{document}
+%-----------------------------------------
+\begin{slide}[bm=]{<<На подумать>> перед началом спецкурса}
+\begin{itemize}
+\item Какие компиляторы C++ вы знаете?
+\item Что такое C++11, C++14, C++17, что было до и что будет после?
+\item Сколько байт занимает \texttt{int} в C++?
+\item При записи \texttt{g() + h()} в каком порядке будут вызваны функции?
+\item Чему равно \texttt{INT\_MAX + 1}? А \texttt{UINT\_MAX + 1}?
+\item Что получится в результате выполнения \texttt{i = i+++++i}?
+\end{itemize}
+\end{slide}
+
 \maketitle
 
------------------------------------------
+%-----------------------------------------
 \begin{slide}[bm=]{Компиляторы C++}
 \pause
 \begin{itemize}
@@ -48,7 +60,7 @@ palette=color,
 \begin{itemize}
 \item Публикуется International Standard Organisation
 \item Большинство компиляторов стараются его соблюдать (MSVS известное исключение)
-\item Существуют разные версии стандарта: C++03, C++11 (C++0x), C++14, C++17 (в разработке)
+\item Существуют разные версии стандарта: C++03, C++11 (C++0x), C++14, C++17, C++20 (в разработке)
 \item Отдельные аспекты языка отданы <<на откуп>> авторам компиляторов (<<реализаций>>)
 \end{itemize}
 \end{slide}
@@ -225,10 +237,59 @@ palette=color,
 }
 \end{slide}
 %-----------------------------------------
-\begin{slide}[bm=]{Выход за пределы массива}
-\label{LastPage}
-
+\begin{slide}[bm=]{Еще примеры}
+\begin{itemize}
+\item Деление на ноль
+\item Возврат ссылки или указателя на локальную переменую
+\item Отсутствие return в функции, возвращающей не void
+\item Добавление в \texttt{namespace std}
+\item И многое другое
+\item Грубо: если вам кажется, что какая-то конструкция нарушает <<правила языка>>, то весьма вероятно, что это UB.
+\end{itemize}
 \end{slide}
 %-----------------------------------------
+\begin{slide}[bm=]{Реальные примеры: ядро Linux}
+\verbatiminput{real/linux.cpp}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Реальные примеры: random()}
+\verbatiminput{real/random.cpp}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Зачем все это?}
+\begin{itemize}
+\item Оптимизации
+\item Разные платформы
+\item Компилятор не злой, компилятор доверчивый
+\item \strut<<А у меня работает>> --- не аргумент
+\item Очень сложно предупреждать, чтобы не выдать кучу ложных срабатываний и не замедлить работу
+\verbatiminput{other/no_warn.cpp}
+\end{itemize}
+\end{slide}
+%-----------------------------------------
+\begin{slide}[bm=]{Что с этим делать?}
+\begin{itemize}
+\item Valgrind
+\item AddressSanitizer
+\item Ключи компилятора
+\begin{itemize}
+\item Предупреждения
+\item Специфичные ключи против UB (\texttt{-fwrapv} для переполнения int'а, и т.п.) 
+\end{itemize}
+\end{itemize}
+\end{slide}
+%-----------------------------------------
+
+\begin{wideslide}[bm=]{Полезные ссылки}
+\small
+\begin{itemize}
+\item \texttt{http://blog.llvm.org/2011/05/what-every-c-programmer-should-know.html}
+\item \texttt{https://pdos.csail.mit.edu/papers/ub:apsys12.pdf}
+\item \texttt{http://www.complang.tuwien.ac.at/kps2015/proceedings/} \texttt{KPS\_2015\_submission\_29.pdf}
+\item \texttt{https://habr.com/post/229963/}
+\item \texttt{http://stackoverflow.com/questions/367633}
+\item \texttt{https://blog.regehr.org/archives/767} и ссылки там
+\end{itemize}
+\end{wideslide}
 
 \end{document}
