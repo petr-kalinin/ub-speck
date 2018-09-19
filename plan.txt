@@ -1,0 +1,89 @@
+* C++ standard
+** undefined vs unspecified vs implementation-defined http://stackoverflow.com/questions/2397984/undefined-unspecified-and-implementation-defined-behavior
+** nasal daemons
+*** Unspecified, Последовательность вычисления аргументов фукнции (evaluation_order.cpp, clang vs g++)
+** C too
+* Примеры
+** выход за пределы массива и оптимизация цикла (array_range_error.cpp, -O3 vs -O0)
+** Неинициализированный bool (uninitialized_bool.cpp, -O0 ведет себя странно (!!) )
+** переполнение signed (!) int (x+1 > x?) (signed_overflow.cpp, -O3 vs -O0) (-fwrapv)
+** Изменение const-переменной (modify_const.cpp)
+** <<32 (left_shift.cpp, -O0 vs -O3)
+
+** i+++++i (modifying_twice, выводит 2 всегда в gcc и clang)
+** f(i=-1, i=-1)
+
+** fermat (clang++ -O3 vs -O0)
+
+** realloc (realloc.cpp, clang++ -O3 vs -O0)
+
+
+** деление на ноль перед выводом (division_by_zero_order.cpp, но под gcc и clang не проявляется)
+** Возврат ссылки на локальную переменную
+** Модификация const char*
+** No return in function returning non-void
+** adding to namespace std
+** Указатели на разные типы (низ http://blog.llvm.org/2011/05/what-every-c-programmer-should-know.html)
+** ODR (pow от pkun)
+** Доступ по невалидному указателю (в отличие от просто копирования, которое ID)
+** Recursive call in static variable (p144)
+** Много другого
+
+** nethack & gc 1.17
+** 
+* Реальные примеры 
+** разыменование указателя в ядре linux (https://isc.sans.edu/diary/A+new+fascinating+Linux+kernel+vulnerability/6820)
+** randseed через неинициализированную переменную (http://kqueue.org/blog/2012/06/25/more-randomness-or-less/)
+* Причины (см. также http://blog.llvm.org/2011/05/what-every-c-programmer-should-know_21.html)
+** Undefined и оптимизации, макросы
+** разные платформы
+** А у меня работает!  
+** Взлом через UB
+
+* Valgrind/AddressSanitizer
+* ключи (-fwarpv, etc)
+* Полезные ссылки
+
+
+--- 
+Поискать по стандарту
+GPL лицензию
+
+---
+http://habrahabr.ru/post/229963/
+http://blog.llvm.org/2011/05/what-every-c-programmer-should-know.html
+http://stackoverflow.com/questions/21670459/why-is-fi-1-i-1-undefined-behavior
+http://stackoverflow.com/questions/31782354/downcasting-and-virtual-functions/31782980 
+http://blog.regehr.org/archives/759 and links there
+http://stackoverflow.com/questions/367633/what-are-all-the-common-undefined-behaviours-that-a-c-programmer-should-know-a 
+http://blog.regehr.org/archives/1234 
+
+http://blog.regehr.org/archives/213 (the first post)
+http://blog.regehr.org/archives/226
+http://blog.regehr.org/archives/232
+
+http://developerblog.redhat.com/2014/10/16/gcc-undefined-behavior-sanitizer-ubsan/ 
+http://www.complang.tuwien.ac.at/kps2015/proceedings/KPS_2015_submission_29.pdf 
+https://en.wikipedia.org/wiki/Undefined_behavior
+http://kqueue.org/blog/2012/06/25/more-randomness-or-less/
+https://isc.sans.edu/diary/A+new+fascinating+Linux+kernel+vulnerability/6820
+
+https://pdos.csail.mit.edu/papers/ub:apsys12.pdf
+
+http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4296.pdf
+
+---
+
+4) Формально UB в некоторой конструкции возможно, но логика программы такова, что оно никогда не реализуется.
+И этот случай на самом деле самый частый. Встречается чуть ли не важдой второй строчке.
+Пример:
+
+for (int i = 0; i < 42; ++i)
+{
+    do_something(i);
+}
+
+В выражении ++i возможно UB. Хотим ли мы, чтобы компилятор вставил проверку или выдавал предупреждение? Ведь тут нет никакого UB, т. к. i никогда не достигнет INT_MAX. 
+
+Или всё-таки достигнет? Что, если do_something получает i по ссылке и изменяет его значение? Как компилятор может это понять? Только в процессе преобразований кода, то есть в процессе оптимизации.
+(https://habrahabr.ru/post/229963/#comment_7783685)
