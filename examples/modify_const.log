@@ -1,0 +1,7 @@
+$ g++ modify_const.cpp \
+    -o modify_const
+
+$ ./modify_const
+a=5
+Ошибка сегментирования 
+(сделан дамп памяти)

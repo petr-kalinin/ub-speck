@@ -1,0 +1,9 @@
+$ clang++ realloc.cpp -o realloc
+
+$ ./realloc
+2 2
+
+$ clang++ -O3 realloc.cpp -o realloc
+
+$ ./realloc
+1 2

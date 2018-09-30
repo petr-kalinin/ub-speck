@@ -1,0 +1,11 @@
+$ g++ evaluation_order.cpp \
+      -o evaluation_order
+$ ./evaluation_order 
+buz()
+bar()
+
+$ clang++ evaluation_order.cpp \
+      -o evaluation_order
+$ ./evaluation_order 
+bar()
+buz()

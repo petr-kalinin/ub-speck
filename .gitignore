@@ -2,6 +2,6 @@
 *.toc
 *.aux
 *.dvi
-*.log
 *.bm
 *.ps
+ub-speck.log

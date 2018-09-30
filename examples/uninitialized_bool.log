@@ -1,0 +1,6 @@
+$ g++ uninitialized_bool.cpp \
+    -o uninitialized_bool
+
+$ ./uninitialized_bool 
+b is true
+b is not true

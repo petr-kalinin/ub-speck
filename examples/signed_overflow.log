@@ -1,0 +1,21 @@
+$ g++ signed_overflow.cpp -o signed_overflow
+signed_overflow.cpp: 
+In function 'int main()':
+signed_overflow.cpp:9:28: 
+warning: integer overflow in expression [-Woverflow]
+     std::cout << ( (INT_MAX+1) > INT_MAX ) << std::endl;
+
+$ ./signed_overflow 
+0
+0
+
+$ g++ -O3 signed_overflow.cpp -o signed_overflow
+signed_overflow.cpp: 
+In function 'int main()':
+signed_overflow.cpp:9:28: 
+warning: integer overflow in expression [-Woverflow]
+     std::cout << ( (INT_MAX+1) > INT_MAX ) << std::endl;
+                            ^
+$ ./signed_overflow 
+0
+1

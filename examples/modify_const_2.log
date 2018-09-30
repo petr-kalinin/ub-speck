@@ -1,0 +1,11 @@
+$ g++ modify_const_2.cpp \
+    -o modify_const_2
+
+$ ./modify_const_2 
+main:a=5
+f:a=5
+f:a=10
+main:a=5
+f:a=10
+f:a=10
+main:a=5

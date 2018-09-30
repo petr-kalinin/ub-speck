@@ -1,0 +1,10 @@
+$ g++ left_shift.cpp -o left_shift
+
+$ ./left_shift 
+1
+
+$ g++ -O3 left_shift.cpp \
+    -o left_shift
+
+$ ./left_shift 
+0
