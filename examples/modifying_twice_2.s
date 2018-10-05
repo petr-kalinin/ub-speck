@@ -1,0 +1,5 @@
+ZERO i
+DEC i
+ZERO i
+DEC i
+CALL f
