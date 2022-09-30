@@ -15,9 +15,10 @@ palette=color,
 как прострелить себе ногу в C++}
 
 \author{
-\hbox to 11cm{\hfill\rm \small Петр Калинин, 2016--2018}\\[-0.15cm]
+\hbox to 11cm{\hfill\rm \small Петр Калинин, 2016--\dots}\\[-0.15cm]
 \hbox to 11cm{\hfill\rm \small Эту презентацию можно распространять по лицензии}\\[-0.15cm]
-\hbox to 11cm{\hfill\rm \small GNU General Public License версии 3.0 или старше}\\[-0.05cm]
+\hbox to 11cm{\hfill\rm \small GNU General Public License версии 3.0 или старше}\\[-0.15cm]
+\hbox to 11cm{\hfill\rm \small https://github.com/petr-kalinin/ub-speck}\\[-0.05cm]
 \hbox to 11cm{\hfill\rm \small \includegraphics[width=1.5cm]{gpl-by-christian-candena-color.eps}}
 }
 
@@ -28,10 +29,10 @@ palette=color,
 
 \begin{document}
 %-----------------------------------------
-\begin{slide}[bm=]{<<На подумать>> перед началом спецкурса}
+\begin{slide}[bm=]{<<На подумать>> перед началом лекции}
 \begin{itemize}
 \item Какие компиляторы C++ вы знаете?
-\item Что такое C++11, C++14, C++17, что было до и что будет после?
+\item Что такое C++11, C++14, C++17, C++20, что было до и что будет после?
 \item Сколько байт занимает \texttt{int} в C++?
 \item При записи \texttt{g() + h()} в каком порядке будут вызваны функции?
 \item Чему равно \texttt{INT\_MAX + 1}? А \texttt{UINT\_MAX + 1}?
@@ -60,7 +61,7 @@ palette=color,
 \begin{itemize}
 \item Публикуется International Standard Organisation
 \item Большинство компиляторов стараются его соблюдать (MSVS известное исключение)
-\item Существуют разные версии стандарта: C++03, C++11 (C++0x), C++14, C++17, C++20 (в разработке)
+\item Существуют разные версии стандарта: C++03, C++11 (C++0x), C++14, C++17, C++20
 \item Отдельные аспекты языка отданы <<на откуп>> авторам компиляторов (<<реализаций>>)
 \end{itemize}
 \end{slide}
@@ -110,7 +111,7 @@ palette=color,
 \item Undefined behavior
 \begin{itemize}
 \item Компилятор (и скомпилированная программа) может сделать абсолютно что угодно
-\item Диагностировать ошибку компиляции, <<вылететь>>, выдать некорректные даннные, отформатировать жесткий диск\dots
+\item Диагностировать ошибку компиляции, <<вылететь>>, выдать некорректные данные, отформатировать жесткий диск\dots
 \item А может и работать <<как ожидалось>>
 \end{itemize}
 \end{itemize}
